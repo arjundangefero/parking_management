@@ -6,7 +6,14 @@ from .models import ParkingSlot, Booking, Customer
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Count, Sum
+from .serializers import MyTokenObtainPairSerializer
+from rest_framework.permissions import AllowAny
+from rest_framework_simplejwt.views import TokenObtainPairView
 
+
+class MyObtainTokenPairView(TokenObtainPairView):
+    permission_classes = (AllowAny,)
+    serializer_class = MyTokenObtainPairSerializer
 
 
 class ParkingSlotViewSet(viewsets.ModelViewSet):
@@ -25,6 +32,7 @@ class ParkingSlotViewSet(viewsets.ModelViewSet):
             else:
                 queryset = queryset.filter(date=date, is_available=True)
         return queryset
+
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = Booking.objects.all()
